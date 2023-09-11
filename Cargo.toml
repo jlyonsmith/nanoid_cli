@@ -1,0 +1,28 @@
+[package]
+name = "nanoid_cli"
+version = "0.0.0"
+edition = "2021"
+authors = ["John Lyon-Smith <john@lyon-smith.org>"]
+description = "Nanoid CLI"
+repository = "https://github.com/jlyonsmith/nanoid_cli"
+readme = "README.md"
+keywords = []
+categories = []
+license = "Unlicense"
+
+[dependencies]
+clap = { version = "4.0.7", features = ["derive", "env"] }
+easy-error = "1.0.0"
+lazy_static = "1.4.0"
+yansi = "0.5.1"
+
+[dev-dependencies]
+criterion = "^0.3"
+
+[[bench]]
+name = "benchmarks"
+harness = false
+
+[[bin]]
+name = "nanoid-cli"
+path = "src/bin/nanoid_cli.rs"
