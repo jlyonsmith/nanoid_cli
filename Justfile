@@ -26,7 +26,7 @@ doc OPEN='':
     cargo doc
   end
 
-release OPERATION='incrPatch':
+release OPERATION='incrBuild':
   #!/usr/bin/env fish
   function info
     set_color green; echo "👉 "$argv; set_color normal

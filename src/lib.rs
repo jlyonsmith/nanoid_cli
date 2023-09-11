@@ -1,12 +1,14 @@
+mod alphabet;
 mod log_macros;
 
-use clap::Parser;
+use clap::{Parser, ValueEnum};
 use core::fmt::Arguments;
 use easy_error::{self, ResultExt};
+use nanoid;
 use std::{
     error::Error,
     fs::File,
-    io::{self, Read, Write},
+    io::{self, Write},
     path::PathBuf,
 };
 
@@ -27,13 +29,28 @@ struct Cli {
     #[arg(long = "no-color", short = 'n', env = "NO_CLI_COLOR")]
     no_color: bool,
 
-    /// The input file
-    #[arg(value_name = "INPUT_FILE")]
-    input_file: Option<PathBuf>,
+    #[arg(long, short = 'l')]
+    length: Option<usize>,
+
+    #[arg(long, short = 'c')]
+    count: Option<usize>,
 
     /// The output file
     #[arg(value_name = "OUTPUT_FILE")]
     output_file: Option<PathBuf>,
+
+    /// Alphabet
+    #[arg(long, short = 'a', num_args = 0..=1, default_value_t = Alphabet::Safe, default_missing_value = "safe", value_enum)]
+    alphabet: Alphabet,
+}
+
+#[derive(ValueEnum, Clone)]
+enum Alphabet {
+    Dec,
+    Hex,
+    Alpha,
+    AlphaFull,
+    Safe,
 }
 
 impl Cli {
@@ -47,16 +64,6 @@ impl Cli {
                 .map(|f| Box::new(f) as Box<dyn Write>)
                 .map_err(|e| Box::new(e) as Box<dyn Error>),
             None => Ok(Box::new(io::stdout())),
-        }
-    }
-
-    fn get_input(&self) -> Result<Box<dyn Read>, Box<dyn Error>> {
-        match self.input_file {
-            Some(ref path) => File::open(path)
-                .context(format!("Unable to open file '{}'", path.to_string_lossy()))
-                .map(|f| Box::new(f) as Box<dyn Read>)
-                .map_err(|e| Box::new(e) as Box<dyn Error>),
-            None => Ok(Box::new(io::stdin())),
         }
     }
 }
@@ -78,11 +85,19 @@ impl<'a> NanoidCliTool<'a> {
             }
         };
 
-        let mut content = String::new();
+        let alphabet: &[char] = match cli.alphabet {
+            Alphabet::Dec => &alphabet::DECIMAL,
+            Alphabet::Hex => &alphabet::HEXADECIMAL,
+            Alphabet::Alpha => &alphabet::ALPHA_NUMERIC,
+            Alphabet::AlphaFull => &alphabet::ALPHA_NUMERIC_FULL,
+            Alphabet::Safe => &alphabet::URL_SAFE,
+        };
 
-        cli.get_input()?.read_to_string(&mut content)?;
+        for _ in 0..cli.count.unwrap_or(1) {
+            let id = nanoid::format(nanoid::rngs::default, alphabet, cli.length.unwrap_or(21));
 
-        write!(cli.get_output()?, "{}", content)?;
+            writeln!(cli.get_output()?, "{}", id)?;
+        }
 
         Ok(())
     }

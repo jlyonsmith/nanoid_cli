@@ -1,30 +1,22 @@
-# Nanoid Cli
+# Nanoid CLI
 
 [![coverage](https://shields.io/endpoint?url=https://raw.githubusercontent.com/jlyonsmith/nanoid_cli/main/coverage.json)](https://github.com/jlyonsmith/nanoid_cli/blob/main/coverage.json)
 [![Crates.io](https://img.shields.io/crates/v/nanoid_cli.svg)](https://crates.io/crates/nanoid_cli)
 [![Docs.rs](https://docs.rs/nanoid_cli/badge.svg)](https://docs.rs/nanoid_cli)
 
-Nanoid CLI
+This is a command line for the Rust crate [nanoid](https://crates.io/crates/nanoid), a tiny, secure, URL-friendly, unique string ID generator.  Nanoid has been ported to over 20 languages.  This project provides command line interface to the library so you can manually generate strings.  It provides the following options:
 
-- [x] Based off of `cargo new`
-- [x] Prompts for [Cargo.toml](./Cargo.toml) details
-- [x] Uses [`clap`](https://crates.io/crates/clap) for command line processing
-- [x] Uses [`colored`](https://crates.io/crates/colored) for messages
-- [x] Includes [`lazy_static`](https://crates.io/crates/lazy_static) just because
-- [x] Adds a [`Justfile`](https://crates.io/crates/just) with shortcuts for releasing
-- [x] Includes a [`version.json5`](./version.json5) file for use with [StampVer](https://crates.io/crates/stampver)
-- [x] Includes UNLICENSE file
-- [x] Adds [`coverage.json`](./coverage.json) and badge
-- [x] README with [crates.io](https://crates.io/) and [docs.rs](https://docs.rs/) badges
-- [x] Includes a `scratch` directory
-- [x] Includes an [`.vscode/launch.json`](.vscode/launch.json) and other settings
-- [x] Includes [`.gitignore`](./.gitignore)
-- [x] Creates a named binary file
-- [x] Default [`log_macros.rs`](./src/log_macros.rs) for logging
-- [x] [`rust-toolchain.toml`](./rust-toolchain.toml) set to `stable`
-- [x] Uses a [Deno](https://deno.land/) based [`customize.ts`](./customize.ts) file
-- [x] Creates a `.vscode/launch.json` file for debugging
-- [x] Includes basic unit tests
-- [x] Includes [Criterion](https://crates.io/crates/criterion) and basic benchmark tests
+- Set the length of the ID
+- Generate multiple ID's at once, one per line
+- Use a variety of pre-defined alphabets:
+  - **Decimal** using the digits 0 to 9
+  - **Hexadecimal** using the digis 0 to 9 and A to F
+  - **Alpha Numeric** using the characters 0 to 9 and A to Z
+  - **Full Alpha Numeric** using the characters 0 to 9, A to Z and a to z.
+  - **Secure URL** the default, URL safe alphabet
 
-This software was written by John Lyon-Smith.
+Install it with `cargo install nanoid_cli`.  Use `nanoid --help` to see the full list of options.
+
+The tool uses the [clap](https://docs.rs/clap/latest/clap/index.html) crate for command line processing.
+
+Pull requests welcomed for additional features, such a customizable alphabets.
